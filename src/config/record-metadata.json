@@ -1,0 +1,613 @@
+{
+  "TransferApplication": {
+    "name": "TransferApplication",
+    "fields": [
+      {
+        "name": "name",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "applicationNumber",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "studentReference",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "sourceInstitution",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "targetProgram",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "submittedAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      }
+    ]
+  },
+  "SourceCourse": {
+    "name": "SourceCourse",
+    "fields": [
+      {
+        "name": "name",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "courseCode",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "institution",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "credits",
+        "kind": "number",
+        "required": true,
+        "min": 0
+      },
+      {
+        "name": "grade",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "completedAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  },
+  "TargetCourse": {
+    "name": "TargetCourse",
+    "fields": [
+      {
+        "name": "name",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "courseCode",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "department",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "credits",
+        "kind": "number",
+        "required": true,
+        "min": 0
+      },
+      {
+        "name": "outcomes",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "catalogVersion",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  },
+  "SyllabusEvidence": {
+    "name": "SyllabusEvidence",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "sourceCourseId",
+        "kind": "string",
+        "required": true,
+        "relation": "SourceCourse"
+      },
+      {
+        "name": "version",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "contactHours",
+        "kind": "number",
+        "required": true,
+        "min": 0
+      },
+      {
+        "name": "learningOutcomes",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "assessmentMethods",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "sourceReference",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  },
+  "ArticulationAgreement": {
+    "name": "ArticulationAgreement",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "institution",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "version",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "effectiveAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "expiresAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "terms",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  },
+  "EquivalencyProposal": {
+    "name": "EquivalencyProposal",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "sourceCourseId",
+        "kind": "string",
+        "required": true,
+        "relation": "SourceCourse"
+      },
+      {
+        "name": "targetCourseId",
+        "kind": "string",
+        "required": true,
+        "relation": "TargetCourse"
+      },
+      {
+        "name": "proposedCredits",
+        "kind": "number",
+        "required": true,
+        "min": 0
+      },
+      {
+        "name": "rationale",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  },
+  "FacultyEvaluation": {
+    "name": "FacultyEvaluation",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "equivalencyProposalId",
+        "kind": "string",
+        "required": true,
+        "relation": "EquivalencyProposal"
+      },
+      {
+        "name": "faculty",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "reviewedAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "decision",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "rationale",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  },
+  "CreditAward": {
+    "name": "CreditAward",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "sourceCourseId",
+        "kind": "string",
+        "required": true,
+        "relation": "SourceCourse"
+      },
+      {
+        "name": "awardedCredits",
+        "kind": "number",
+        "required": true,
+        "min": 0
+      },
+      {
+        "name": "awardType",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "awardedAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "authorizationReference",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  },
+  "TransferAppeal": {
+    "name": "TransferAppeal",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "sourceCourseId",
+        "kind": "string",
+        "required": true,
+        "relation": "SourceCourse"
+      },
+      {
+        "name": "submittedAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "reason",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "evidence",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "decisionDueAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  },
+  "OperationalTask": {
+    "name": "OperationalTask",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "owner",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "priority",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "startAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "dueAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "done",
+        "kind": "boolean",
+        "required": true
+      },
+      {
+        "name": "notes",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  },
+  "RuleVersion": {
+    "name": "RuleVersion",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "jurisdiction",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "version",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "effectiveAt",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "expiresAt",
+        "kind": "date",
+        "required": false
+      },
+      {
+        "name": "sourceUrl",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "requirementText",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  },
+  "DocumentRequirement": {
+    "name": "DocumentRequirement",
+    "fields": [
+      {
+        "name": "title",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "category",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "requiredBy",
+        "kind": "date",
+        "required": true
+      },
+      {
+        "name": "sourceReference",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "evidenceReference",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "reviewNotes",
+        "kind": "string",
+        "required": false
+      },
+      {
+        "name": "status",
+        "kind": "string",
+        "required": true
+      },
+      {
+        "name": "transferApplicationId",
+        "kind": "string",
+        "required": true,
+        "relation": "TransferApplication"
+      }
+    ],
+    "parent": {
+      "entity": "TransferApplication",
+      "field": "transferApplicationId"
+    }
+  }
+}

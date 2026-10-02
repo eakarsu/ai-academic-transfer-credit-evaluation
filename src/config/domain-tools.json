@@ -1,0 +1,65 @@
+[
+  {
+    "id": "domain-calculation",
+    "title": "Transfer credit totals",
+    "operation": "credits",
+    "example": {
+      "ruleSource": "Fictional demonstration rule v1; replace with reviewed applicable terms",
+      "maximumCredits": 60,
+      "courses": [
+        {
+          "id": "course-A",
+          "sourceCredits": 3,
+          "awardedCredits": 3
+        },
+        {
+          "id": "course-B",
+          "sourceCredits": 4,
+          "awardedCredits": 3
+        }
+      ]
+    },
+    "description": "Sum faculty-entered awards, reject duplicate source courses and show cap excess; equivalency is a reviewed decision."
+  },
+  {
+    "id": "evidence-check",
+    "operation": "evidence",
+    "title": "Transfer Application evidence checklist",
+    "description": "Check source presence against an explicitly supplied document list; reviewer assesses adequacy.",
+    "example": {
+      "requirements": [
+        {
+          "id": "source-1",
+          "requirement": "Source Course evidence",
+          "evidence": "Example source reference"
+        },
+        {
+          "id": "source-2",
+          "requirement": "Reviewed rule version",
+          "evidence": ""
+        }
+      ]
+    }
+  },
+  {
+    "id": "deadline-check",
+    "operation": "deadlines",
+    "title": "Operational deadline queue",
+    "description": "Compute overdue items from entered dates and completed flags; no external notifications.",
+    "example": {
+      "asOf": "2026-10-20T12:00:00Z",
+      "items": [
+        {
+          "id": "review-1",
+          "dueAt": "2026-10-18T00:00:00Z",
+          "completed": false
+        },
+        {
+          "id": "follow-up-1",
+          "dueAt": "2026-10-23T00:00:00Z",
+          "completed": false
+        }
+      ]
+    }
+  }
+]

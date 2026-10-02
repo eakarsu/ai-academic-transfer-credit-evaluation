@@ -1,0 +1,365 @@
+// Generated schema — modeled after beautyhqio conventions.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  active       Boolean @default(true)
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(ANALYST)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  ANALYST
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actorName String?
+  action    String
+  entity    String
+  entityId  String?
+  detail    String?
+  createdAt DateTime @default(now())
+}
+
+model WorkflowAnalysis {
+ id String @id @default(cuid())
+ actorId String
+ workflow String
+ subjectEntity String
+ subjectId String
+ input Json
+ evidence Json
+ evidenceHash String
+ result Json
+ model String
+ receipt String?
+ createdAt DateTime @default(now())
+ @@index([workflow, createdAt])
+}
+model RecordReview {
+ id String @id @default(cuid())
+ actorId String
+ entity String
+ entityId String
+ version String
+ reason String
+ createdAt DateTime @default(now())
+ @@unique([entity, entityId, version, actorId])
+}
+model UsageBucket {
+ id String @id
+ calls Int
+}
+model IssuedCredential {
+ token String @id
+ entity String
+ entityId String
+ version String
+ assertion Json
+ createdAt DateTime @default(now())
+ revokedAt DateTime?
+ @@index([entity, entityId, createdAt])
+}
+
+model DomainArtifact {
+ id String @id @default(cuid())
+ subjectEntity String
+ subjectId String
+ title String
+ content String
+ contentHash String
+ actorId String
+ approvedBy String?
+ createdAt DateTime @default(now())
+ @@index([subjectEntity, subjectId])
+}
+
+model RecordApproval {
+ id String @id
+ version String
+}
+model DomainExecution {
+ id String @id
+ actorId String
+ connectorId String
+ action String
+ subjectEntity String
+ subjectId String
+ version String
+ status String
+ result Json?
+ createdAt DateTime @default(now())
+}
+
+model WorkSession {
+ id String @id @default(cuid())
+ actorId String
+ respondentId String
+ subjectEntity String
+ subjectId String
+ questions Json
+ answers Json
+ currentQuestion String?
+ status String
+ deadline DateTime
+ createdAt DateTime @default(now())
+ @@index([respondentId, createdAt])
+}
+model SessionMedia {
+ id String @id @default(cuid())
+ sessionId String
+ questionId String
+ actorId String
+ contentType String
+ bytes Bytes
+ contentHash String
+ createdAt DateTime @default(now())
+ @@index([sessionId])
+}
+
+model AppSetting {
+ id String @id
+ value Json
+ updatedAt DateTime @updatedAt
+}
+
+model TransferApplication {
+ id String @id @default(cuid())
+ name String
+ applicationNumber String
+ studentReference String
+ sourceInstitution String
+ targetProgram String
+ submittedAt DateTime
+ status String @default("Draft")
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ inverseSourceCourse_transferApplicationId SourceCourse[] @relation("SourceCourse_transferApplicationId")
+ inverseTargetCourse_transferApplicationId TargetCourse[] @relation("TargetCourse_transferApplicationId")
+ inverseSyllabusEvidence_transferApplicationId SyllabusEvidence[] @relation("SyllabusEvidence_transferApplicationId")
+ inverseArticulationAgreement_transferApplicationId ArticulationAgreement[] @relation("ArticulationAgreement_transferApplicationId")
+ inverseEquivalencyProposal_transferApplicationId EquivalencyProposal[] @relation("EquivalencyProposal_transferApplicationId")
+ inverseFacultyEvaluation_transferApplicationId FacultyEvaluation[] @relation("FacultyEvaluation_transferApplicationId")
+ inverseCreditAward_transferApplicationId CreditAward[] @relation("CreditAward_transferApplicationId")
+ inverseTransferAppeal_transferApplicationId TransferAppeal[] @relation("TransferAppeal_transferApplicationId")
+ inverseOperationalTask_transferApplicationId OperationalTask[] @relation("OperationalTask_transferApplicationId")
+ inverseRuleVersion_transferApplicationId RuleVersion[] @relation("RuleVersion_transferApplicationId")
+ inverseDocumentRequirement_transferApplicationId DocumentRequirement[] @relation("DocumentRequirement_transferApplicationId")
+}
+
+model SourceCourse {
+ id String @id @default(cuid())
+ name String
+ courseCode String
+ institution String
+ credits Float
+ grade String
+ completedAt DateTime
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedTransferApplicationId TransferApplication @relation("SourceCourse_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+ inverseSyllabusEvidence_sourceCourseId SyllabusEvidence[] @relation("SyllabusEvidence_sourceCourseId")
+ inverseEquivalencyProposal_sourceCourseId EquivalencyProposal[] @relation("EquivalencyProposal_sourceCourseId")
+ inverseCreditAward_sourceCourseId CreditAward[] @relation("CreditAward_sourceCourseId")
+ inverseTransferAppeal_sourceCourseId TransferAppeal[] @relation("TransferAppeal_sourceCourseId")
+}
+
+model TargetCourse {
+ id String @id @default(cuid())
+ name String
+ courseCode String
+ department String
+ credits Float
+ outcomes String
+ catalogVersion String
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedTransferApplicationId TransferApplication @relation("TargetCourse_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+ inverseEquivalencyProposal_targetCourseId EquivalencyProposal[] @relation("EquivalencyProposal_targetCourseId")
+}
+
+model SyllabusEvidence {
+ id String @id @default(cuid())
+ title String
+ sourceCourseId String
+ version String
+ contactHours Float
+ learningOutcomes String
+ assessmentMethods String
+ sourceReference String
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedSourceCourseId SourceCourse @relation("SyllabusEvidence_sourceCourseId", fields: [sourceCourseId], references: [id], onDelete: Restrict)
+ linkedTransferApplicationId TransferApplication @relation("SyllabusEvidence_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+}
+
+model ArticulationAgreement {
+ id String @id @default(cuid())
+ title String
+ institution String
+ version String
+ effectiveAt DateTime
+ expiresAt DateTime
+ terms String
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedTransferApplicationId TransferApplication @relation("ArticulationAgreement_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+}
+
+model EquivalencyProposal {
+ id String @id @default(cuid())
+ title String
+ sourceCourseId String
+ targetCourseId String
+ proposedCredits Float
+ rationale String
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedSourceCourseId SourceCourse @relation("EquivalencyProposal_sourceCourseId", fields: [sourceCourseId], references: [id], onDelete: Restrict)
+ linkedTargetCourseId TargetCourse @relation("EquivalencyProposal_targetCourseId", fields: [targetCourseId], references: [id], onDelete: Restrict)
+ linkedTransferApplicationId TransferApplication @relation("EquivalencyProposal_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+ inverseFacultyEvaluation_equivalencyProposalId FacultyEvaluation[] @relation("FacultyEvaluation_equivalencyProposalId")
+}
+
+model FacultyEvaluation {
+ id String @id @default(cuid())
+ title String
+ equivalencyProposalId String
+ faculty String
+ reviewedAt DateTime
+ decision String
+ rationale String
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedEquivalencyProposalId EquivalencyProposal @relation("FacultyEvaluation_equivalencyProposalId", fields: [equivalencyProposalId], references: [id], onDelete: Restrict)
+ linkedTransferApplicationId TransferApplication @relation("FacultyEvaluation_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+}
+
+model CreditAward {
+ id String @id @default(cuid())
+ title String
+ sourceCourseId String
+ awardedCredits Float
+ awardType String
+ awardedAt DateTime
+ authorizationReference String
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedSourceCourseId SourceCourse @relation("CreditAward_sourceCourseId", fields: [sourceCourseId], references: [id], onDelete: Restrict)
+ linkedTransferApplicationId TransferApplication @relation("CreditAward_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+}
+
+model TransferAppeal {
+ id String @id @default(cuid())
+ title String
+ sourceCourseId String
+ submittedAt DateTime
+ reason String
+ evidence String
+ decisionDueAt DateTime
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedSourceCourseId SourceCourse @relation("TransferAppeal_sourceCourseId", fields: [sourceCourseId], references: [id], onDelete: Restrict)
+ linkedTransferApplicationId TransferApplication @relation("TransferAppeal_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+}
+
+model OperationalTask {
+ id String @id @default(cuid())
+ title String
+ owner String
+ priority String
+ startAt DateTime
+ dueAt DateTime
+ done Boolean
+ notes String?
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedTransferApplicationId TransferApplication @relation("OperationalTask_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+}
+
+model RuleVersion {
+ id String @id @default(cuid())
+ title String
+ jurisdiction String
+ version String
+ effectiveAt DateTime
+ expiresAt DateTime?
+ sourceUrl String
+ requirementText String
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedTransferApplicationId TransferApplication @relation("RuleVersion_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+}
+
+model DocumentRequirement {
+ id String @id @default(cuid())
+ title String
+ category String
+ requiredBy DateTime
+ sourceReference String
+ evidenceReference String?
+ reviewNotes String?
+ status String @default("Draft")
+ transferApplicationId String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([createdAt])
+ @@index([transferApplicationId])
+ linkedTransferApplicationId TransferApplication @relation("DocumentRequirement_transferApplicationId", fields: [transferApplicationId], references: [id], onDelete: Restrict)
+}
